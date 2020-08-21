@@ -1,11 +1,10 @@
 const User = require('../models/User');
-const Cab = require('../models/Cab');
 const authService = require('../services/auth.service');
 // const bcryptService = require('../services/bcrypt.service');
 
 const UserController = () => {
   const register = async (req, res) => {
-    const { userid, password } = req.params;
+    const { userid, password } = req.body;
 
     try {
       const user = await User.create({
@@ -20,7 +19,7 @@ const UserController = () => {
   };
 
   const login = async (req, res) => {
-    const { userid, password } = req.params;
+    const { userid, password } = req.body;
 
     if (userid && password) {
       try {
@@ -50,7 +49,7 @@ const UserController = () => {
   };
 
   const validate = (req, res) => {
-    const { token } = req.params;
+    const { token } = req.body;
 
     authService().verify(token, (err) => {
       if (err) {
@@ -70,69 +69,11 @@ const UserController = () => {
       return res.status(500).json({ msg: 'Internal server error' });
     }
   };
-
-  const bookcab = async (req, res) => {
-    const {
-      userid, password, locA, locB,
-    } = req.body;
-
-    if (userid && password) {
-      try {
-        const user = await User
-          .findOne({
-            where: {
-              userid,
-            },
-          });
-
-        if (!user) {
-          return res.status(400).json({ msg: 'Bad Request: User not found' });
-        }
-        if (password === user.password) {
-          const token = authService().issue({ id: user.id });
-
-          return res.status(200).json({
-            token,
-            user,
-            bookingDetail: {
-              start: locA,
-              end: locB,
-              bookingID: user.id,
-            },
-          });
-        }
-
-        return res.status(401).json({ msg: 'Unauthorized' });
-      } catch (err) {
-        return res.status(500).json({ msg: 'Internal server error' });
-      }
-    }
-
-    return res.status(400).json({ msg: 'Something went wrong' });
-  };
-  const bookdetails = async (req, res) => {
-    const { userid } = req.body;
-    try {
-      const cabdetails = await Cab.findAll({
-        where: {
-          userid,
-        },
-      });
-
-      return res.status(200).json({ cabdetails });
-    } catch (err) {
-      return res.status(500).json({ msg: 'Internal server error' });
-    }
-  };
-
-
   return {
     register,
     login,
     validate,
-    getAll,
-    bookcab,
-    bookdetails,
+    getAll
   };
 };
 

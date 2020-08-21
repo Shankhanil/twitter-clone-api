@@ -1,13 +1,11 @@
 const publicRoutes = {
-  'GET /user/:userid/:password': 'UserController.register',
-  'GET /register/:userid/:password': 'UserController.register', // alias for GET /user
-  'GET /login/:userid/:password': 'UserController.login',
-  'GET /validate/:token': 'UserController.validate',
+  'GET /user': 'UserController.register',
+  'GET /register': 'UserController.register', // alias for GET /user
+  'GET /login': 'UserController.login',
+  'GET /validate': 'UserController.validate',
   'GET /users': 'UserController.getAll',
-
-  'GET /bookcab': 'UserController.bookcab',
-  'GET /bookdetails': 'UserController.bookdetails',
-
+  
+  'GET /tweet': 'TweetController.postTweet',
 };
 
 module.exports = publicRoutes;
