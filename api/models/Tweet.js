@@ -12,6 +12,9 @@ const Tweet = sequelize.define('Tweet', {
   tweet: {
     type: Sequelize.STRING,
   },
+  parent: {
+	type: Sequelize.STRING,
+  }
 }, { tableName });
 
 // eslint-disable-next-line

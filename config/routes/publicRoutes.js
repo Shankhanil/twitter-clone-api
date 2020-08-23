@@ -4,6 +4,7 @@ const publicRoutes = {
   'GET /login': 'UserController.login',
   'GET /validate': 'UserController.validate',
   'GET /users': 'UserController.getAll',
+  'GET /profile': 'UserController.profile',
   
   'GET /tweet': 'TweetController.postTweet',
   'GET /alltweets': 'TweetController.getAllTweets',

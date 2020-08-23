@@ -19,13 +19,20 @@ const User = sequelize.define('User', {
   password: {
     type: Sequelize.STRING,
   },
+  name: {
+	type: Sequelize.STRING,
+  },
+  bio: {
+	type: Sequelize.STRING,
+  }
+  
 }, {  tableName });
 
 // eslint-disable-next-line
 User.prototype.toJSON = function () {
   const values = Object.assign({}, this.get());
 
-  // delete values.password;
+  delete values.password;
 
   return values;
 };

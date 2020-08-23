@@ -69,11 +69,27 @@ const UserController = () => {
       return res.status(500).json({ msg: 'Internal server error' });
     }
   };
+  const profile = async (req, res) =>{
+	  const {userid} = req.body;
+	  try{
+		const user = await User.findOne({
+			where: {
+				userid
+			},
+		});
+		if (!user)
+			return res.status(400).json({err: 'Bad request! user not found!'});
+		return res.status(200).json(user);
+	  } catch(err){
+		  return res.status(500).json({ err });
+	  }
+  };
   return {
     register,
     login,
     validate,
-    getAll
+    getAll,
+	profile
   };
 };
 

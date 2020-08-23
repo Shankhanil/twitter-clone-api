@@ -1,6 +1,5 @@
 const User = require('../models/User');
 const Tweet = require('../models/Tweet');
-const Comment = require('../models/Comment');
 const UserController = require('../controllers/UserController');
 const authService = require('../services/auth.service');
 var request = require('request');
@@ -89,10 +88,10 @@ const TweetController = () => {
 					if (!findTweet){
 						return res.status(400).json({msg: "Bad Request. Tweet not found!!"});  
 					}
-					const postComment = await Comment.create({
+					const postComment = await Tweet.create({
 						userid,
-						tweetid,
-						comment
+						parent:tweetid,
+						tweet: comment
 					});
 					return res.status(200).json({findTweet, userid, comment});
 				}
@@ -112,9 +111,9 @@ const TweetController = () => {
 						  id : tweetid,
 						},
 					});
-			const comments = await Comment.findAll({
+			const comments = await Tweet.findAll({
 						where: {
-						  tweetid,
+						  parent: tweetid,
 						},
 					});
 			if (!tweet){
