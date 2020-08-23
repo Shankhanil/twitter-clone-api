@@ -6,6 +6,12 @@ const publicRoutes = {
   'GET /users': 'UserController.getAll',
   
   'GET /tweet': 'TweetController.postTweet',
+  'GET /alltweets': 'TweetController.getAllTweets',
+  'GET /comment': 'TweetController.postComment',
+  'GET /thread': 'TweetController.getThread',
+  
+  
+  'GET /seed': 'SeedController.seed',
 };
 
 module.exports = publicRoutes;

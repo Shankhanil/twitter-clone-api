@@ -3,19 +3,22 @@ const bcryptService = require('../services/bcrypt.service');
 
 const sequelize = require('../../config/database');
 
-const tableName = 'tweets';
+const tableName = 'comments';
 
-const Tweet = sequelize.define('Tweet', {
+const Comment = sequelize.define('Comment', {
   userid: {
     type: Sequelize.STRING,
   },
-  tweet: {
+  tweetid: {
     type: Sequelize.STRING,
   },
+  comment: {
+	  type: Sequelize.STRING,
+  }
 }, { tableName });
 
 // eslint-disable-next-line
-Tweet.prototype.toJSON = function () {
+Comment.prototype.toJSON = function () {
   const values = Object.assign({}, this.get());
 
   // delete values.password;
@@ -24,5 +27,5 @@ Tweet.prototype.toJSON = function () {
 };
 
 
-module.exports = Tweet;
+module.exports = Comment;
 
