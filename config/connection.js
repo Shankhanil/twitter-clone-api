@@ -1,3 +1,4 @@
+const ENDPOINT = 'http://localhost:2017';
 const development = {
   database: 'databasename',
   username: 'username',
@@ -23,6 +24,7 @@ const production = {
 };
 
 module.exports = {
+  ENDPOINT,
   development,
   testing,
   production,

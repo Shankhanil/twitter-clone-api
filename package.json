@@ -1,6 +1,6 @@
 {
-  "name": "express-rest-api-boilerplate",
-  "version": "0.0.0",
+  "name": "twitter-clone-backend",
+  "version": "1.0.0",
   "author": "Shankhanil Ghosh",
   "license": "MIT",
   "repository": {

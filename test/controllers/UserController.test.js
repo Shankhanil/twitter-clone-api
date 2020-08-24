@@ -4,7 +4,6 @@ const {
   afterAction,
 } = require('../setup/_setup');
 const User = require('../../api/models/User');
-const Cab = require('../../api/models/Cab');
 
 let api;
 
@@ -17,8 +16,13 @@ afterAll(() => {
 });
 
 test('User | create', async () => {
-  const res = await request(api)
-    .get('/public/user/someuser/securepassword')
+  let res = await request(api)
+    .get('/user')
+    .set('Accept', /json/)
+    .send({
+      userid: 'someuser',
+      password: 'securepassword',
+    })
     .expect(200);
 
   expect(res.body.user).toBeTruthy();
@@ -27,6 +31,26 @@ test('User | create', async () => {
 
   expect(user.id).toBe(res.body.user.id);
   expect(user.userid).toBe(res.body.user.userid);
+
+  // no available userid
+  res = await request(api)
+    .get('/user')
+    .set('Accept', /json/)
+    .send({
+      userid: 'someuser',
+    })
+    .expect(400);
+
+  // null password or username
+  res = await request(api)
+    .get('/user')
+    .set('Accept', /json/)
+    .send({
+      userid: '',
+      password: '',
+    })
+    .expect(400);
+
 
   await user.destroy();
 });
@@ -37,31 +61,62 @@ test('User | login', async () => {
     password: 'securepassword',
   });
 
-  const res = await request(api)
-    .get('/public/login/someuser/securepassword')
+  let res = await request(api)
+    .get('/login')
+    .set('Accept', /json/)
+    .send({
+      userid: 'someuser',
+      password: 'securepassword',
+    })
     .expect(200);
 
   expect(res.body.token).toBeTruthy();
 
   expect(user).toBeTruthy();
 
+  // test for wrong password
+  res = await request(api)
+    .get('/login')
+    .set('Accept', /json/)
+    .send({
+      userid: 'someuser',
+      password: 'wrongpassword',
+    })
+    .expect(401);
+
+  // test for un-regsitered username
+  res = await request(api)
+    .get('/login')
+    .set('Accept', /json/)
+    .send({
+      userid: 'someunknownuser',
+      password: 'somepassword',
+    })
+    .expect(400);
+
   await user.destroy();
 });
 
-test('User | get all (auth)', async () => {
+test('User | get all ', async () => {
   const user = await User.create({
     userid: 'someuser',
     password: 'securepassword',
   });
 
   const res = await request(api)
-    .get('/public/login/someuser/securepassword')
+    .get('/login')
+    .set('Accept', /json/)
+    .send({
+      userid: 'someuser',
+      password: 'securepassword',
+    })
     .expect(200);
 
   expect(res.body.token).toBeTruthy();
 
   const res2 = await request(api)
-    .get('/public/users')
+    .get('/users')
+    .set('Accept', /json/)
     .expect(200);
 
   expect(res2.body.users).toBeTruthy();
@@ -69,59 +124,33 @@ test('User | get all (auth)', async () => {
 
   await user.destroy();
 });
-test('User | Book a cab', async () => {
+
+test('User | profile ', async () => {
   const user = await User.create({
     userid: 'someuser',
     password: 'securepassword',
   });
 
-  const res = await request(api)
-    .get('/public/bookcab')
+  let res = await request(api)
+    .get('/profile')
     .set('Accept', /json/)
     .send({
       userid: 'someuser',
-      password: 'securepassword',
-      locA: 'location-a',
-      locB: 'location-b',
     })
     .expect(200);
 
-  expect(res.body.token).toBeTruthy();
-  expect(res.body.bookingDetail).toBeTruthy();
-  expect(res.body.bookingDetail.bookingID).toBeTruthy();
-  expect(res.body.bookingDetail.start).toBe('location-a');
-  expect(res.body.bookingDetail.end).toBe('location-b');
+  expect(res.body.userid).toBeTruthy();
+  expect(res.body.password).toBeFalsy();
+  expect(res.body.userid).toBe('someuser');
 
-
-  await user.destroy();
-});
-test('User | Get Bookking details ', async () => {
-  const user = await User.create({
-    userid: 'someuser',
-    password: 'securepassword',
-  });
-  const cab = await Cab.create({
-    userid: 'someuser',
-    start: 'loc-1',
-    end: 'loc-2',
-  });
-  const cab2 = await Cab.create({
-    userid: 'someuser',
-    start: 'loc-3',
-    end: 'loc-4',
-  });
-
-  const res2 = await request(api)
-    .get('/public/bookdetails')
+  res = await request(api)
+    .get('/profile')
+    .set('Accept', /json/)
     .send({
-      userid: 'someuser',
+      userid: 'someunknownuser',
     })
-    .expect(200);
-
-  expect(res2.body.cabdetails).toBeTruthy();
-  expect(res2.body.cabdetails.length).toBe(2);
+    .expect(400);
 
   await user.destroy();
-  await cab.destroy();
-  await cab2.destroy();
 });
+

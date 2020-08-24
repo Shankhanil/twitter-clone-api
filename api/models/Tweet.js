@@ -1,5 +1,5 @@
 const Sequelize = require('sequelize');
-const bcryptService = require('../services/bcrypt.service');
+// const bcryptService = require('../services/bcrypt.service');
 
 const sequelize = require('../../config/database');
 
@@ -13,8 +13,8 @@ const Tweet = sequelize.define('Tweet', {
     type: Sequelize.STRING,
   },
   parent: {
-	type: Sequelize.STRING,
-  }
+    type: Sequelize.STRING,
+  },
 }, { tableName });
 
 // eslint-disable-next-line

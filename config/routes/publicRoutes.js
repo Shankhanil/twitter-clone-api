@@ -5,14 +5,16 @@ const publicRoutes = {
   'GET /validate': 'UserController.validate',
   'GET /users': 'UserController.getAll',
   'GET /profile': 'UserController.profile',
-  
+  'GET /follow': 'UserController.follow',
+
   'GET /tweet': 'TweetController.postTweet',
   'GET /alltweets': 'TweetController.getAllTweets',
   'GET /comment': 'TweetController.postComment',
   'GET /thread': 'TweetController.getThread',
-  
-  
+
+
   'GET /seed': 'SeedController.seed',
+
 };
 
 module.exports = publicRoutes;
