@@ -1,4 +1,5 @@
-const ENDPOINT = 'http://localhost:2017';
+// const ENDPOINT = 'http://localhost:2017';
+const ENDPOINT = 'https://limitless-anchorage-71184.herokuapp.com/';
 const development = {
   database: 'databasename',
   username: 'username',
